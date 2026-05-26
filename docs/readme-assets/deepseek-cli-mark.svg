@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">DeepSeek CLI mark</title>
+  <desc id="desc">A compact terminal and route mark for the DeepSeek CLI README.</desc>
+  <defs>
+    <linearGradient id="bg" x1="96" y1="72" x2="416" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#082f49"/>
+      <stop offset="0.48" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="line" x1="160" y1="166" x2="360" y2="346" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67e8f9"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect x="56" y="56" width="400" height="400" rx="112" fill="url(#bg)"/>
+  <rect x="98" y="116" width="316" height="236" rx="34" fill="#020617" opacity="0.86"/>
+  <rect x="98" y="116" width="316" height="54" rx="34" fill="#0f172a"/>
+  <circle cx="136" cy="143" r="8" fill="#22c55e"/>
+  <circle cx="164" cy="143" r="8" fill="#67e8f9"/>
+  <circle cx="192" cy="143" r="8" fill="#94a3b8"/>
+  <path d="M151 220l42 36-42 36" fill="none" stroke="#67e8f9" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M224 292h82" fill="none" stroke="#22c55e" stroke-width="24" stroke-linecap="round"/>
+  <path d="M308 216c38 0 68 30 68 68s-30 68-68 68" fill="none" stroke="url(#line)" stroke-width="20" stroke-linecap="round"/>
+  <path d="M308 216l26-28M308 216l31 20M308 352l28 25M308 352l34-15" fill="none" stroke="#99f6e4" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="308" cy="216" r="16" fill="#67e8f9"/>
+  <circle cx="308" cy="352" r="16" fill="#22c55e"/>
+  <circle cx="376" cy="284" r="16" fill="#a7f3d0"/>
+</svg>

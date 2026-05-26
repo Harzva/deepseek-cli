@@ -1,63 +1,137 @@
-# Provider API CLI Suite
+<p align="center">
+  <img src="docs/readme-assets/deepseek-cli-mark.svg" alt="DeepSeek CLI mark" width="180" />
+</p>
 
-A user-facing CLI and Agent Skills toolkit for calling multiple model providers from the terminal or from an agent workflow.
+<h1 align="center">DeepSeek CLI</h1>
 
-Supported providers now include OpenAI, Anthropic / Claude, Google Gemini, Ollama Local, AWS Bedrock, DeepSeek, Kimi / Moonshot, Xiaomi MiMo, and GLM / BigModel.
+<p align="center">
+  DeepSeek-first API CLI and Agent Skills toolkit, with multi-provider fallback for OpenAI, Anthropic, Gemini, Ollama, Bedrock, Kimi, MiMo, and GLM.
+</p>
 
-## Install
+<p align="center">
+  <a href="https://github.com/Harzva/deepseek-cli/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/Harzva/deepseek-cli/ci.yml?branch=main&label=ci" /></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/Harzva/deepseek-cli" /></a>
+  <a href="package.json"><img alt="Node" src="https://img.shields.io/badge/node-%3E%3D18-16a34a" /></a>
+  <a href="docs/html/index.html"><img alt="Docs" src="https://img.shields.io/badge/docs-visual%20guides-0ea5e9" /></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick start</a>
+  ·
+  <a href="#deepseek-first-workflow">DeepSeek-first workflow</a>
+  ·
+  <a href="#agent-skills">Agent Skills</a>
+  ·
+  <a href="docs/html/visual-tutorials.html">Visual docs</a>
+  ·
+  <a href="CLI_REFERENCE.md">CLI reference</a>
+</p>
+
+## Why this repo exists
+
+DeepSeek is often the first practical choice for cost-sensitive reasoning, OpenAI-compatible chat, JSON payloads, and agent experiments. This repository makes that path explicit:
+
+| Goal | What to use |
+| --- | --- |
+| Start with DeepSeek quickly | `deepseek chat "hello" --dry-run --json` |
+| Compare other providers only when needed | `provider-api compare` and `provider-api recommend "task"` |
+| Give agents a stable execution surface | install the bundled Skills and call CLI commands with `--json` |
+| Avoid accidental live calls | use `--dry-run` before using real API keys |
+| Understand protocol boundaries | read Native / Compatible / Harness visual guides |
+
+The project still keeps the original multi-provider toolkit because real agent work often needs provider comparison, migration, fallback, or local/offline testing. The repo positioning is now **DeepSeek first, provider-aware second**.
+
+## Quick start
 
 ```bash
-npm install -g @just-agent/provider-api-cli
+npm install --ignore-scripts
+npm run validate
+npm test
 ```
 
-## First commands
+Try the DeepSeek path without making a live API request:
 
 ```bash
-provider-api compare
-provider-api protocols
-provider-api recommend "local json extraction with tool calls"
-provider-api skills install --all
-
-openai-api responses "hello" --dry-run --json
-gemini-api generate "hello" --dry-run --json
-ollama-api chat "hello" --dry-run --json
-bedrock-api converse "hello" --dry-run --json
+node packages/deepseek-api-cli/bin/deepseek.mjs chat "hello" --dry-run --json
+node packages/provider-api-cli/bin/provider-api.mjs recommend "cheap reasoning json extraction" --json
+node packages/provider-api-cli/bin/provider-api.mjs skills install --all --dir ./tmp-skills --json
 ```
 
-## CLI and Skill
+> The published npm package names are still under the existing `@just-agent/*` workspace. This repository rename does not break the current CLI package layout.
 
-- CLI is the stable execution surface for API calls.
-- Skill is the agent-readable instruction layer that explains when and how to use each CLI.
-- MCP is handled as an agent integration protocol, not as another model generation endpoint.
-- Harness owns approvals, tool execution, retries, logs, and evidence.
+## DeepSeek-first workflow
 
-## Protocols
+```mermaid
+flowchart LR
+  A["Task: reasoning, JSON, chat, agent eval"] --> B["DeepSeek CLI first"]
+  B --> C["Dry run payload"]
+  C --> D["Live API call when key is configured"]
+  D --> E["Agent or script consumes JSON stdout"]
+  B --> F["Provider comparison only if DeepSeek is not enough"]
+  F --> G["OpenAI / Anthropic / Gemini / Ollama / Bedrock / Kimi / MiMo / GLM"]
+```
 
-| Protocol | CLI | Use when |
+## Command map
+
+| Surface | Command | Role |
 | --- | --- | --- |
-| OpenAI Responses | `openai-api` | structured output, function calling, built-in tools |
-| Anthropic Messages | `anthropic-api` | Claude native workflows, extended thinking, prompt caching |
-| Gemini GenerateContent | `gemini-api` | Google Gemini native multimodal / JSON / function calling |
-| Ollama Chat | `ollama-api` | local and offline model testing |
-| AWS Bedrock Converse | `bedrock-api` | enterprise AWS multi-model routing and dry-run planning |
-| OpenAI-compatible Chat | `deepseek`, `kimi`, `mimo`, `glm` | compatible provider chat workflows |
-| MCP Bridge Skill | `skills/mcp-bridge` | expose CLI commands as agent tools/resources/prompts |
+| DeepSeek | `deepseek` | Primary path for OpenAI-compatible DeepSeek chat, JSON, reasoning, and tool-call payloads |
+| Provider router | `provider-api` | Compare providers, recommend a route, install Skills, print contracts |
+| OpenAI | `openai-api` | Responses API, structured outputs, built-in tools |
+| Anthropic | `anthropic-api` | Claude Messages API and native Claude workflows |
+| Gemini | `gemini-api` | GenerateContent, JSON, multimodal, function calling |
+| Ollama | `ollama-api` | Local and offline model testing |
+| Bedrock | `bedrock-api` | AWS Bedrock Converse dry-run and enterprise routing |
+| China providers | `kimi`, `mimo`, `glm` | OpenAI-compatible provider experiments |
 
+## Agent Skills
 
-## Visual guide: Native, Compatible, and Harness
+The CLI is the execution surface. Skills are the agent-readable instruction layer.
 
-This repository includes a visual tutorial that explains the difference between Provider, Protocol, Endpoint, Adapter, and Harness.
+```bash
+node packages/provider-api-cli/bin/provider-api.mjs skills list --json
+node packages/provider-api-cli/bin/provider-api.mjs skills install --all --dir ./tmp-skills --json
+```
 
-- Open the local docs page: `docs/html/native-compatible-guide.html`
-- Key idea: protocol is about request/response shape; adapter is about integration method; harness is about task execution, tools, permissions, logs, and evidence.
+Skill boundaries:
 
+- CLI prints model output or JSON envelopes on stdout.
+- Diagnostics belong on stderr.
+- API keys are redacted in doctor, config, dry-run, and curl output.
+- Tool execution belongs to the caller or harness, not to the API wrapper.
+- MCP is treated as an agent integration protocol, not as another model generation endpoint.
 
-## API 工具 CLI 与 Agent 编码 CLI
+## Visual documentation
 
-如果你需要区分 `lark-cli` / `openai` CLI 与 Codex CLI / Claude Code 的产品层级，请阅读 [CLI_AGENT_CLI_GUIDE.md](docs/CLI_AGENT_CLI_GUIDE.md)。
+| Guide | Use it for |
+| --- | --- |
+| [`docs/html/visual-tutorials.html`](docs/html/visual-tutorials.html) | Native / Compatible / CLI / Skill / Harness overview |
+| [`docs/html/native-compatible-guide.html`](docs/html/native-compatible-guide.html) | DeepSeek, Kimi, MiMo, base URL, adapter, and Harness boundaries |
+| [`docs/html/cli-agent-cli-guide.html`](docs/html/cli-agent-cli-guide.html) | API tool CLI vs Agent coding CLI |
+| [`docs/VISUAL_TUTORIALS_FINAL.md`](docs/VISUAL_TUTORIALS_FINAL.md) | Markdown version for GitHub reading, Agent/RAG ingestion, and notes |
 
+## Repository layout
 
-## 图文教程入口
+```text
+packages/deepseek-api-cli/      DeepSeek-focused CLI package
+packages/provider-api-cli/      Provider comparison, skills, contracts, recipes
+packages/provider-api-core/     Shared provider metadata and runtime helpers
+skills/                         Agent Skills for supported providers
+docs/html/                      Static visual tutorial pages
+schemas/                        Skill and output schemas
+tests/                          Smoke tests for CLI and JSON contracts
+```
 
-- [最终图文索引](docs/html/visual-tutorials.html)：Native / Compatible、Base URL、Adapter、CLI / Skill、DeepSeek-TUI 与 Harness 层级。
-- [图文教程 Markdown](docs/VISUAL_TUTORIALS_FINAL.md)：适合 GitHub 直接阅读和 Agent/RAG 入库。
+## Verification
+
+```bash
+npm run validate
+npm run docs:check
+npm test
+```
+
+Expected result: each command prints an `ok: true` JSON result or exits with status 0.
+
+## Status
+
+This repository is public, MIT licensed, and currently optimized for source-based use and documentation. It is not yet a renamed npm package release. Treat the GitHub repo name as the new product direction; package publishing can be handled in a separate release pass.

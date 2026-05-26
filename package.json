@@ -1,8 +1,8 @@
 {
-  "name": "provider-api-cli-suite",
+  "name": "deepseek-cli",
   "version": "0.18.0",
   "private": true,
-  "description": "User-facing multi-provider API CLI and Agent Skills toolkit for OpenAI, Anthropic, Google Gemini, Ollama, AWS Bedrock, DeepSeek, Kimi, Xiaomi MiMo, and GLM APIs.",
+  "description": "DeepSeek-first API CLI and Agent Skills toolkit with multi-provider fallback for OpenAI, Anthropic, Gemini, Ollama, Bedrock, Kimi, MiMo, and GLM APIs.",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -43,6 +43,6 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Just-Agent/provider-api-cli-suite.git"
+    "url": "https://github.com/Harzva/deepseek-cli.git"
   }
 }
