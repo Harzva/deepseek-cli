@@ -19,9 +19,22 @@
   },
   "license": "MIT",
   "keywords": [
-    "llm",
+    "agent-skills",
     "api",
     "cli",
-    "agent-skills"
-  ]
+    "deepseek",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Harzva/deepseek-cli.git",
+    "directory": "packages/deepseek-api-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Harzva/deepseek-cli/issues"
+  },
+  "homepage": "https://github.com/Harzva/deepseek-cli#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

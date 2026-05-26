@@ -2,7 +2,7 @@
   "name": "@just-agent/ollama-api-cli",
   "version": "0.18.0",
   "type": "module",
-  "description": "Ollama Local API CLI for Provider API CLI Suite.",
+  "description": "Ollama local API CLI for offline model testing and agent-safe dry runs.",
   "bin": {
     "ollama-api": "bin/ollama-api.mjs"
   },
@@ -19,9 +19,22 @@
   },
   "license": "MIT",
   "keywords": [
-    "llm",
+    "agent-skills",
     "api",
     "cli",
+    "llm",
     "ollama"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Harzva/deepseek-cli.git",
+    "directory": "packages/ollama-api-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Harzva/deepseek-cli/issues"
+  },
+  "homepage": "https://github.com/Harzva/deepseek-cli#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

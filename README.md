@@ -20,6 +20,8 @@
   ·
   <a href="#deepseek-first-workflow">DeepSeek-first workflow</a>
   ·
+  <a href="#npm-packages">npm packages</a>
+  ·
   <a href="#agent-skills">Agent Skills</a>
   ·
   <a href="docs/html/visual-tutorials.html">Visual docs</a>
@@ -43,6 +45,16 @@ The project still keeps the original multi-provider toolkit because real agent w
 
 ## Quick start
 
+Install from npm after publication:
+
+```bash
+npm install -g @just-agent/deepseek-cli
+deepseek chat "hello" --dry-run --json
+provider-api recommend "cheap reasoning json extraction" --json
+```
+
+Run from source:
+
 ```bash
 npm install --ignore-scripts
 npm run validate
@@ -56,8 +68,6 @@ node packages/deepseek-api-cli/bin/deepseek.mjs chat "hello" --dry-run --json
 node packages/provider-api-cli/bin/provider-api.mjs recommend "cheap reasoning json extraction" --json
 node packages/provider-api-cli/bin/provider-api.mjs skills install --all --dir ./tmp-skills --json
 ```
-
-> The published npm package names are still under the existing `@just-agent/*` workspace. This repository rename does not break the current CLI package layout.
 
 ## DeepSeek-first workflow
 
@@ -83,6 +93,28 @@ flowchart LR
 | Ollama | `ollama-api` | Local and offline model testing |
 | Bedrock | `bedrock-api` | AWS Bedrock Converse dry-run and enterprise routing |
 | China providers | `kimi`, `mimo`, `glm` | OpenAI-compatible provider experiments |
+
+## npm packages
+
+The workspace now contains a primary DeepSeek-first package and individual provider packages:
+
+| Package | Purpose |
+| --- | --- |
+| `@just-agent/deepseek-cli` | Main install target. Provides `deepseek`, `deepseek-cli`, `provider-api`, and fallback provider commands. |
+| `@just-agent/provider-api-cli` | Full provider suite package with all commands and Skills. |
+| `@just-agent/deepseek-api-cli` | Smaller DeepSeek-only command package. |
+| `@just-agent/provider-api-core` | Shared runtime used by every CLI package. |
+| `@just-agent/openai-api-cli`, `@just-agent/anthropic-api-cli`, `@just-agent/gemini-api-cli`, `@just-agent/ollama-api-cli`, `@just-agent/bedrock-api-cli` | Native provider packages. |
+| `@just-agent/kimi-api-cli`, `@just-agent/mimo-api-cli`, `@just-agent/glm-api-cli` | China provider fallback packages. |
+
+Package verification:
+
+```bash
+npm run pack:check
+npm run pack:npm
+```
+
+`npm run pack:npm` writes publish-ready tarballs and `npm-pack-manifest.json` into `dist/npm/`. The directory is ignored by git and uploaded by the `npm-package` GitHub Actions workflow.
 
 ## Agent Skills
 
@@ -113,6 +145,7 @@ Skill boundaries:
 ## Repository layout
 
 ```text
+packages/deepseek-cli/          Primary npm package: DeepSeek-first bundle
 packages/deepseek-api-cli/      DeepSeek-focused CLI package
 packages/provider-api-cli/      Provider comparison, skills, contracts, recipes
 packages/provider-api-core/     Shared provider metadata and runtime helpers
@@ -128,10 +161,12 @@ tests/                          Smoke tests for CLI and JSON contracts
 npm run validate
 npm run docs:check
 npm test
+npm run pack:check
+npm run pack:npm
 ```
 
 Expected result: each command prints an `ok: true` JSON result or exits with status 0.
 
 ## Status
 
-This repository is public, MIT licensed, and currently optimized for source-based use and documentation. It is not yet a renamed npm package release. Treat the GitHub repo name as the new product direction; package publishing can be handled in a separate release pass.
+This repository is public, MIT licensed, and now has npm package definitions, pack verification, package artifacts, and a tag-driven GitHub Release workflow. It does not publish to the npm registry automatically; registry publishing should be a separate release step after confirming package ownership and npm tokens.

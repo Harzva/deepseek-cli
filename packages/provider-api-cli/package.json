@@ -2,7 +2,7 @@
   "name": "@just-agent/provider-api-cli",
   "version": "0.18.0",
   "type": "module",
-  "description": "Full Provider API CLI Suite for OpenAI, Anthropic, Gemini, Ollama, Bedrock, DeepSeek, Kimi, Xiaomi MiMo, and GLM.",
+  "description": "Full Provider API CLI bundle for DeepSeek, OpenAI, Anthropic, Gemini, Ollama, Bedrock, Kimi, MiMo, and GLM.",
   "bin": {
     "provider-api": "bin/provider-api.mjs",
     "deepseek": "bin/deepseek.mjs",
@@ -28,9 +28,22 @@
   },
   "license": "MIT",
   "keywords": [
-    "llm",
+    "agent-skills",
     "api",
     "cli",
-    "agent-skills"
-  ]
+    "llm",
+    "provider-api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Harzva/deepseek-cli.git",
+    "directory": "packages/provider-api-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Harzva/deepseek-cli/issues"
+  },
+  "homepage": "https://github.com/Harzva/deepseek-cli#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

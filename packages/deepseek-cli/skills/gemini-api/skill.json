@@ -1,0 +1,8 @@
+{
+  "id": "gemini-api",
+  "name": "Google Gemini API",
+  "version": "0.18.0",
+  "entry": "SKILL.md",
+  "cli": "gemini-api",
+  "protocol": "google_gemini_generate_content"
+}

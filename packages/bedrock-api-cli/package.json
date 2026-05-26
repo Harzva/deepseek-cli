@@ -2,7 +2,7 @@
   "name": "@just-agent/bedrock-api-cli",
   "version": "0.18.0",
   "type": "module",
-  "description": "AWS Bedrock API CLI for Provider API CLI Suite.",
+  "description": "AWS Bedrock Converse API CLI for dry-run planning, provider comparison, and agent-safe workflows.",
   "bin": {
     "bedrock-api": "bin/bedrock-api.mjs"
   },
@@ -19,9 +19,22 @@
   },
   "license": "MIT",
   "keywords": [
-    "llm",
+    "agent-skills",
     "api",
+    "bedrock",
     "cli",
-    "bedrock"
-  ]
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Harzva/deepseek-cli.git",
+    "directory": "packages/bedrock-api-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Harzva/deepseek-cli/issues"
+  },
+  "homepage": "https://github.com/Harzva/deepseek-cli#readme",
+  "publishConfig": {
+    "access": "public"
+  }
 }

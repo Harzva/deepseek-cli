@@ -311,13 +311,16 @@ export function recommendProviders(query='') {
     if (/gemini|google|generatecontent|multimodal|vision|video|audio/.test(q) && p.id === 'gemini') { score += 24; reasons.push('native Gemini GenerateContent fit'); }
     if (/local|offline|privacy|ollama|localhost|本地|离线/.test(q) && p.id === 'ollama') { score += 28; reasons.push('local/offline model workflow'); }
     if (/aws|bedrock|converse|enterprise|iam|sigv4/.test(q) && p.id === 'bedrock') { score += 22; reasons.push('AWS Bedrock Converse enterprise profile'); }
+    if (p.id === 'deepseek') { score += 6; reasons.push('DeepSeek-first default route'); }
+    if (/cheap|cost|low.?cost|budget|性价比|便宜|低成本/.test(q) && p.id === 'deepseek') { score += 18; reasons.push('cost-sensitive DeepSeek-first route'); }
     if (/json|schema|extract|structure|结构/.test(q) && ['openai','gemini','deepseek','glm','kimi'].includes(p.id)) { score += 14; reasons.push('good for structured output'); }
     if (/tool|function|agent|工具|调用/.test(q) && ['openai','anthropic','gemini','bedrock','deepseek','glm'].includes(p.id)) { score += 16; reasons.push('strong tool/function calling fit'); }
     if (/long|context|document|summar|阅读|长文|总结/.test(q) && ['anthropic','gemini','kimi','deepseek','openai'].includes(p.id)) { score += 16; reasons.push('good long-context / reading workflow'); }
     if (/fast|cheap|quick|简单|便宜|快速/.test(q) && ['deepseek','mimo','openai','ollama','gemini'].includes(p.id)) { score += 10; reasons.push('fast CLI workflow and light default options'); }
     if (/reason|think|推理|思考/.test(q) && ['anthropic','openai','gemini','deepseek','mimo','glm'].includes(p.id)) { score += 15; reasons.push('reasoning-oriented workflow'); }
     if (/中文|chinese|cn/.test(q) && ['kimi','glm','deepseek','gemini'].includes(p.id)) { score += 10; reasons.push('Chinese developer documentation fit'); }
-    return { provider:p.id, command:p.cmd, name:p.display, defaultModel:p.default_model, protocol:p.protocol, score, reasons: reasons.length?reasons:p.best.slice(0,2), install:`npm install -g ${p.pkg}`, try:`${p.cmd} chat "hello" --dry-run --json` };
+    const installPkg = p.id === 'deepseek' ? '@just-agent/deepseek-cli' : p.pkg;
+    return { provider:p.id, command:p.cmd, name:p.display, defaultModel:p.default_model, protocol:p.protocol, score, reasons: reasons.length?reasons:p.best.slice(0,2), install:`npm install -g ${installPkg}`, try:`${p.cmd} chat "hello" --dry-run --json` };
   }).sort((a,b)=>b.score-a.score);
 }
 

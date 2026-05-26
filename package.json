@@ -10,7 +10,9 @@
   "scripts": {
     "validate": "node scripts/validate.mjs",
     "docs:check": "node scripts/docs-check.mjs",
-    "test": "node tests/smoke-test.mjs"
+    "test": "node tests/smoke-test.mjs",
+    "pack:check": "node scripts/pack-check.mjs",
+    "pack:npm": "node scripts/pack-npm.mjs"
   },
   "engines": {
     "node": ">=18"

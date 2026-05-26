@@ -14,4 +14,5 @@ npm install --ignore-scripts
 npm run validate
 npm run docs:check
 npm test
+npm run pack:check
 ```

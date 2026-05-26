@@ -1,0 +1,63 @@
+name: npm-package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Build npm package artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --ignore-scripts
+      - run: npm run validate
+      - run: npm run docs:check
+      - run: npm test
+      - run: npm run pack:npm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deepseek-cli-npm-packages
+          path: |
+            dist/npm/*.tgz
+            dist/npm/npm-pack-manifest.json
+          retention-days: 30
+
+  github-release:
+    name: Attach npm packages to tag release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm install --ignore-scripts
+      - run: npm run pack:npm
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release upload "$TAG_NAME" dist/npm/*.tgz dist/npm/npm-pack-manifest.json --clobber
+          else
+            gh release create "$TAG_NAME" dist/npm/*.tgz dist/npm/npm-pack-manifest.json --title "$TAG_NAME" --generate-notes
+          fi
