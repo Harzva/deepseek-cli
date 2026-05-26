@@ -1,0 +1,8 @@
+{
+  "id": "glm-api",
+  "name": "GLM / 智谱 BigModel API Skill",
+  "version": "0.16.0",
+  "cli": "glm",
+  "provider": "glm",
+  "description": "Call GLM / 智谱 BigModel API through the glm CLI."
+}

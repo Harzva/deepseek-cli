@@ -1,0 +1,8 @@
+{
+  "id": "provider-api",
+  "title": "Provider API Router Skill",
+  "command": "provider-api",
+  "version": "0.17.0",
+  "description": "Choose between OpenAI, Anthropic, DeepSeek, Kimi, MiMo, and GLM for a task.",
+  "entry": "SKILL.md"
+}

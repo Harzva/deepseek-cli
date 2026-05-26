@@ -1,0 +1,49 @@
+{
+  "version": "0.18.0",
+  "skills": [
+    {
+      "id": "provider-api",
+      "path": "skills/provider-api/SKILL.md"
+    },
+    {
+      "id": "openai-api",
+      "path": "skills/openai-api/SKILL.md"
+    },
+    {
+      "id": "anthropic-api",
+      "path": "skills/anthropic-api/SKILL.md"
+    },
+    {
+      "id": "gemini-api",
+      "path": "skills/gemini-api/SKILL.md"
+    },
+    {
+      "id": "ollama-api",
+      "path": "skills/ollama-api/SKILL.md"
+    },
+    {
+      "id": "bedrock-api",
+      "path": "skills/bedrock-api/SKILL.md"
+    },
+    {
+      "id": "mcp-bridge",
+      "path": "skills/mcp-bridge/SKILL.md"
+    },
+    {
+      "id": "deepseek-api",
+      "path": "skills/deepseek-api/SKILL.md"
+    },
+    {
+      "id": "kimi-api",
+      "path": "skills/kimi-api/SKILL.md"
+    },
+    {
+      "id": "mimo-api",
+      "path": "skills/mimo-api/SKILL.md"
+    },
+    {
+      "id": "glm-api",
+      "path": "skills/glm-api/SKILL.md"
+    }
+  ]
+}

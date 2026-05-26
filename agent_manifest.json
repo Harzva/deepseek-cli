@@ -1,0 +1,49 @@
+{
+  "name": "Provider API CLI Suite",
+  "version": "0.18.0",
+  "providers": [
+    "openai",
+    "anthropic",
+    "gemini",
+    "ollama",
+    "bedrock",
+    "deepseek",
+    "kimi",
+    "mimo",
+    "glm"
+  ],
+  "skills": [
+    "provider-api",
+    "openai-api",
+    "anthropic-api",
+    "gemini-api",
+    "ollama-api",
+    "bedrock-api",
+    "mcp-bridge",
+    "deepseek-api",
+    "kimi-api",
+    "mimo-api",
+    "glm-api"
+  ],
+  "protocols": [
+    "openai_responses",
+    "anthropic_messages",
+    "openai_chat_compat",
+    "google_gemini_generate_content",
+    "ollama_chat",
+    "aws_bedrock_converse",
+    "mcp_tool_context"
+  ],
+  "entrypoints": [
+    "provider-api",
+    "openai-api",
+    "anthropic-api",
+    "gemini-api",
+    "ollama-api",
+    "bedrock-api",
+    "deepseek",
+    "kimi",
+    "mimo",
+    "glm"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "mimo-api",
+  "title": "Xiaomi MiMo API Skill",
+  "command": "mimo",
+  "version": "0.18.0",
+  "description": "Use MiMo for MiMo API workflows and OpenAI-compatible reasoning-content experiments.",
+  "entry": "SKILL.md"
+}

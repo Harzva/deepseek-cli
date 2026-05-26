@@ -1,0 +1,27 @@
+{
+  "name": "@just-agent/kimi-api-cli",
+  "version": "0.18.0",
+  "type": "module",
+  "description": "Kimi / Moonshot API CLI.",
+  "bin": {
+    "kimi": "bin/kimi.mjs"
+  },
+  "dependencies": {
+    "@just-agent/provider-api-core": "^0.18.0"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "api",
+    "cli",
+    "agent-skills"
+  ]
+}

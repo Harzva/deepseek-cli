@@ -1,0 +1,7 @@
+{
+  "id": "mcp-bridge",
+  "name": "MCP Bridge Skill",
+  "version": "0.18.0",
+  "entry": "SKILL.md",
+  "protocol": "mcp_tool_context"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@just-agent/anthropic-api-cli",
+  "version": "0.18.0",
+  "type": "module",
+  "description": "Anthropic Claude API CLI with native Messages API support.",
+  "bin": {
+    "anthropic-api": "bin/anthropic-api.mjs"
+  },
+  "dependencies": {
+    "@just-agent/provider-api-core": "^0.18.0"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "api",
+    "cli",
+    "agent-skills",
+    "anthropic"
+  ]
+}

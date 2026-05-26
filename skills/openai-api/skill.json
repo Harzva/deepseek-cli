@@ -1,0 +1,8 @@
+{
+  "id": "openai-api",
+  "title": "OpenAI API Skill",
+  "command": "openai-api",
+  "version": "0.18.0",
+  "description": "Use OpenAI Responses API for structured output, tools, streaming, and multimodal workflows.",
+  "entry": "SKILL.md"
+}

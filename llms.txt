@@ -1,0 +1,3 @@
+Provider API CLI Suite v18
+
+Use provider-api compare --json to inspect providers. Use provider-api skills install --all to install skills. Supported protocols: OpenAI Responses, Anthropic Messages, OpenAI-compatible Chat, Gemini GenerateContent, Ollama Chat, AWS Bedrock Converse, and MCP bridge skill.

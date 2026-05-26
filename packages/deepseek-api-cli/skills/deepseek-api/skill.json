@@ -1,0 +1,8 @@
+{
+  "id": "deepseek-api",
+  "name": "DeepSeek API Skill",
+  "version": "0.16.0",
+  "cli": "deepseek",
+  "provider": "deepseek",
+  "description": "Call DeepSeek API through the deepseek CLI."
+}

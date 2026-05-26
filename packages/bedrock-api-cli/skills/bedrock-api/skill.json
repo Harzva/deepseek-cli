@@ -1,0 +1,8 @@
+{
+  "id": "bedrock-api",
+  "name": "AWS Bedrock Converse API",
+  "version": "0.18.0",
+  "entry": "SKILL.md",
+  "cli": "bedrock-api",
+  "protocol": "aws_bedrock_converse"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@just-agent/openai-api-cli",
+  "version": "0.18.0",
+  "type": "module",
+  "description": "OpenAI API CLI with native Responses API support.",
+  "bin": {
+    "openai-api": "bin/openai-api.mjs"
+  },
+  "dependencies": {
+    "@just-agent/provider-api-core": "^0.18.0"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "api",
+    "cli",
+    "agent-skills",
+    "openai"
+  ]
+}

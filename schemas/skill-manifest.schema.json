@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Provider API CLI skill manifest",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "version",
+    "cli"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "cli": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

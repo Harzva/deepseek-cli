@@ -1,0 +1,8 @@
+{
+  "id": "ollama-api",
+  "name": "Ollama Local API",
+  "version": "0.18.0",
+  "entry": "SKILL.md",
+  "cli": "ollama-api",
+  "protocol": "ollama_chat"
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Provider API CLI dry-run envelope",
+  "type": "object",
+  "required": [
+    "type",
+    "version",
+    "provider",
+    "request",
+    "redactedCurl",
+    "nextActions"
+  ],
+  "properties": {
+    "type": {
+      "const": "provider-api-cli.dryRun"
+    },
+    "version": {
+      "type": "string"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "request": {
+      "type": "object"
+    },
+    "redactedCurl": {
+      "type": "string"
+    },
+    "nextActions": {
+      "type": "array"
+    }
+  }
+}

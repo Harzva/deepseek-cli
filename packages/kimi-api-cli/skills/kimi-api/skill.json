@@ -1,0 +1,8 @@
+{
+  "id": "kimi-api",
+  "name": "Kimi / Moonshot API Skill",
+  "version": "0.16.0",
+  "cli": "kimi",
+  "provider": "kimi",
+  "description": "Call Kimi / Moonshot API through the kimi CLI."
+}

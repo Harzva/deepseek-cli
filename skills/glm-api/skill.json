@@ -1,0 +1,8 @@
+{
+  "id": "glm-api",
+  "title": "GLM BigModel API Skill",
+  "command": "glm",
+  "version": "0.18.0",
+  "description": "Use GLM for business apps, function calling, and structured output workflows.",
+  "entry": "SKILL.md"
+}

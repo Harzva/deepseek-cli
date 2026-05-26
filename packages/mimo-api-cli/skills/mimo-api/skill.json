@@ -1,0 +1,8 @@
+{
+  "id": "mimo-api",
+  "name": "Xiaomi MiMo API Skill",
+  "version": "0.16.0",
+  "cli": "mimo",
+  "provider": "mimo",
+  "description": "Call Xiaomi MiMo API through the mimo CLI."
+}

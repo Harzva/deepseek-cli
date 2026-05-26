@@ -1,0 +1,8 @@
+{
+  "id": "anthropic-api",
+  "title": "Anthropic Claude API Skill",
+  "command": "anthropic-api",
+  "version": "0.18.0",
+  "description": "Use native Claude Messages API for extended thinking, prompt caching, tool use, and long document reasoning.",
+  "entry": "SKILL.md"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "kimi-api",
+  "title": "Kimi API Skill",
+  "command": "kimi",
+  "version": "0.18.0",
+  "description": "Use Kimi for Chinese reading, long-context summaries, and structured extraction.",
+  "entry": "SKILL.md"
+}

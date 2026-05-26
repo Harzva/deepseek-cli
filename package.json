@@ -1,0 +1,48 @@
+{
+  "name": "provider-api-cli-suite",
+  "version": "0.18.0",
+  "private": true,
+  "description": "User-facing multi-provider API CLI and Agent Skills toolkit for OpenAI, Anthropic, Google Gemini, Ollama, AWS Bedrock, DeepSeek, Kimi, Xiaomi MiMo, and GLM APIs.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "docs:check": "node scripts/docs-check.mjs",
+    "test": "node tests/smoke-test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "agent",
+    "agent-skills",
+    "anthropic",
+    "bedrock",
+    "claude",
+    "cli",
+    "converse-api",
+    "deepseek",
+    "gemini",
+    "generatecontent",
+    "glm",
+    "google-genai",
+    "kimi",
+    "llm",
+    "mcp",
+    "messages-api",
+    "mimo",
+    "multi-protocol",
+    "ollama",
+    "openai",
+    "provider-api",
+    "responses-api",
+    "skills"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Just-Agent/provider-api-cli-suite.git"
+  }
+}

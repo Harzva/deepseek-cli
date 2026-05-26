@@ -1,0 +1,36 @@
+{
+  "name": "@just-agent/provider-api-cli",
+  "version": "0.18.0",
+  "type": "module",
+  "description": "Full Provider API CLI Suite for OpenAI, Anthropic, Gemini, Ollama, Bedrock, DeepSeek, Kimi, Xiaomi MiMo, and GLM.",
+  "bin": {
+    "provider-api": "bin/provider-api.mjs",
+    "deepseek": "bin/deepseek.mjs",
+    "kimi": "bin/kimi.mjs",
+    "mimo": "bin/mimo.mjs",
+    "glm": "bin/glm.mjs",
+    "openai-api": "bin/openai-api.mjs",
+    "anthropic-api": "bin/anthropic-api.mjs",
+    "gemini-api": "bin/gemini-api.mjs",
+    "ollama-api": "bin/ollama-api.mjs",
+    "bedrock-api": "bin/bedrock-api.mjs"
+  },
+  "dependencies": {
+    "@just-agent/provider-api-core": "^0.18.0"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "api",
+    "cli",
+    "agent-skills"
+  ]
+}
