@@ -6,4 +6,6 @@ Full suite package that installs the `provider-api`, `deepseek`, `kimi`, `mimo`,
 npm install -g @just-agent/provider-api-cli
 provider-api compare
 provider-api skills install --all
+deepseek chat --read prompt.md --dry-run --json
+ollama-api chat "hello" --dry-run --json
 ```

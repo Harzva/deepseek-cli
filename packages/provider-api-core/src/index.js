@@ -69,7 +69,7 @@ export const PROVIDERS = {
 export const SKILLS = ['provider-api','openai-api','anthropic-api','gemini-api','ollama-api','bedrock-api','mcp-bridge','deepseek-api','kimi-api','mimo-api','glm-api'];
 
 const BOOL_FLAGS = new Set(['json','raw','stream','stdin','dry-run','verbose','all','help','debug','yes','no-color','strict','compat','thinking','local']);
-const VALUE_FLAGS = new Set(['model','base-url','endpoint','api-key','system','temperature','top-p','max-tokens','max-output-tokens','response-format','tools-file','messages-file','schema','schema-file','save','dir','dest','timeout','retries','auth','f','file','provider','query','preset','template','format','reasoning-effort','budget-tokens','region','profile','mcp-server']);
+const VALUE_FLAGS = new Set(['model','base-url','endpoint','api-key','system','temperature','top-p','max-tokens','max-output-tokens','response-format','tools-file','messages-file','schema','schema-file','save','dir','dest','timeout','retries','auth','f','file','read','provider','query','preset','template','format','reasoning-effort','budget-tokens','region','profile','mcp-server']);
 
 export function parseArgs(argv = []) {
   const out = { _: [] };
@@ -129,7 +129,7 @@ export function makeHeaders(provider, key, args={}) {
 }
 
 async function readStdinIfNeeded(args) {
-  if (!args.stdin) return '';
+  if (!args.stdin && args.read !== '-') return '';
   return await new Promise(resolve => {
     let data = '';
     process.stdin.setEncoding('utf8');
@@ -137,12 +137,28 @@ async function readStdinIfNeeded(args) {
     process.stdin.on('end', () => resolve(data));
   });
 }
+function readTextFile(file, label = 'input') {
+  try {
+    const stat = fs.statSync(file);
+    if (stat.isDirectory()) throw new Error('path is a directory');
+    return fs.readFileSync(file, 'utf8');
+  } catch (e) {
+    throw new Error(`Failed to read ${label} from ${file}: ${e.message}`);
+  }
+}
+function readPromptFiles(args) {
+  const parts = [];
+  if (args.read && args.read !== '-') parts.push(readTextFile(args.read, '--read'));
+  const file = args.f || args.file;
+  if (file) parts.push(readTextFile(file, '--file'));
+  return parts.filter(Boolean).join('\n\n');
+}
 function readJsonFileMaybe(file, label) {
   if (!file) return undefined;
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
   catch (e) { throw new Error(`Failed to read ${label} from ${file}: ${e.message}`); }
 }
-function makeInputText(userText='', stdinText='') { return [userText, stdinText].filter(Boolean).join('\n\n') || 'hello'; }
+function makeInputText(...parts) { return parts.filter(Boolean).join('\n\n') || 'hello'; }
 function chatMessages(args, input) {
   let messages = readJsonFileMaybe(args['messages-file'], 'messages');
   if (messages) return messages;
@@ -172,7 +188,7 @@ export function buildRequest(provider, args, userText = '', stdinText = '') {
   const model = args.model || provider.default_model;
   const baseUrl = (args['base-url'] || provider.base_url).replace(/\/$/, '');
   let endpoint = args.endpoint || provider.endpoint;
-  const input = makeInputText(userText, stdinText);
+  const input = makeInputText(userText, readPromptFiles(args), stdinText);
   const protocol = args.compat && provider.id === 'anthropic' ? 'openai_chat_compat' : provider.protocol;
   if (protocol === 'google_gemini_generate_content') {
     endpoint = endpoint.replace('{model}', encodeURIComponent(model));
@@ -329,6 +345,7 @@ export function recipeList(provider=null) {
   return [
     { id:'hello', title:'First dry run', command:`${cmd} chat "hello" --dry-run --json`, useWhen:'Verify request payload without calling an API.' },
     { id:'stdin-summary', title:'Summarize stdin', command:`cat input.txt | ${cmd} chat --stdin "Summarize this" --json`, useWhen:'Use in shell pipelines and agent workflows.' },
+    { id:'file-prompt', title:'Read a prompt file', command:`${cmd} chat --read prompt.md --dry-run --json`, useWhen:'Review or reuse longer prompts without pasting them into the shell.' },
     { id:'json-extract', title:'Structured JSON extraction', command:`${cmd} chat "Extract fields as JSON" --response-format json --json`, useWhen:'Downstream programs need machine-readable output.' },
     { id:'debug-curl', title:'Generate redacted curl', command:`${cmd} curl "hello"`, useWhen:'Debug headers/body without leaking secrets.' },
     { id:'agent-safe', title:'Agent-safe invocation', command:`${cmd} doctor --json && ${cmd} chat "task" --dry-run --json`, useWhen:'Let an agent inspect readiness before live calls.' }
@@ -346,7 +363,7 @@ export function learningGuide(provider=null) { const name = provider ? provider.
 export function help(provider) {
   if (!provider) return `Provider API CLI Suite ${VERSION}\n\nUsage:\n  provider-api setup                       Guided setup checklist\n  provider-api compare [--json]            Compare supported providers\n  provider-api recommend "json tool"       Pick a provider for a task\n  provider-api skills list|install|doctor  Install Agent Skills\n  provider-api recipes                     Show automation recipes\n  provider-api contract [--json]           Print stable CLI/Agent contract\n  provider-api learn                       Learn CLI, Skill, MCP, Harness boundaries\n\nFast path:\n  provider-api compare\n  provider-api skills install --all\n  openai-api responses "hello" --dry-run --json\n  gemini-api generate "hello" --dry-run --json\n  ollama-api chat "hello" --dry-run --json\n`;
   const special = provider.id === 'openai' ? `\nOpenAI shortcuts:\n  ${provider.cmd} responses "hello"\n  ${provider.cmd} structured --schema-file schema.json "Extract fields"\n  ${provider.cmd} tools --tools-file tools.json "Choose a tool"\n` : provider.id === 'anthropic' ? `\nAnthropic shortcuts:\n  ${provider.cmd} messages "hello"\n  ${provider.cmd} count-tokens "hello" --dry-run --json\n  ${provider.cmd} compat chat "hello" --dry-run --json\n` : provider.id === 'gemini' ? `\nGemini shortcuts:\n  ${provider.cmd} generate "hello"\n  ${provider.cmd} structured --schema-file schema.json "Extract fields"\n  ${provider.cmd} tools --tools-file tools.json "Choose a function"\n` : provider.id === 'ollama' ? `\nOllama shortcuts:\n  ${provider.cmd} chat "hello" --dry-run --json\n  ${provider.cmd} models\n  ${provider.cmd} setup\n` : provider.id === 'bedrock' ? `\nBedrock shortcuts:\n  ${provider.cmd} converse "hello" --dry-run --json\n  ${provider.cmd} doctor --json\n` : '';
-  return `${provider.display} API CLI ${VERSION}\n\nUsage:\n  ${provider.cmd} setup\n  ${provider.cmd} chat "hello" [--json] [--dry-run]\n  ${provider.cmd} prompt -f prompt.md [--stdin] [--json]\n  ${provider.cmd} models [--json]\n  ${provider.cmd} doctor [--json]\n  ${provider.cmd} recommend "my task"\n  ${provider.cmd} recipes\n  ${provider.cmd} curl "hello"\n  ${provider.cmd} skills install\n  ${provider.cmd} contract --json\n  ${provider.cmd} learn\n${special}\nAutomation flags:\n  --stdin --json --raw --stream --dry-run --model <name> --system <text>\n  --temperature <n> --top-p <n> --max-tokens <n> --response-format json\n  --schema-file <json> --messages-file <json> --tools-file <json> --timeout <ms> --retries <n>\n\nAgent rule of thumb:\n  Use --json for automation, --dry-run for safe request inspection, and stderr for diagnostics only.\n`;
+  return `${provider.display} API CLI ${VERSION}\n\nUsage:\n  ${provider.cmd} setup\n  ${provider.cmd} chat "hello" [--json] [--dry-run]\n  ${provider.cmd} chat --read prompt.md [--json] [--dry-run]\n  ${provider.cmd} prompt -f prompt.md [--stdin] [--json]\n  ${provider.cmd} models [--json]\n  ${provider.cmd} doctor [--json]\n  ${provider.cmd} recommend "my task"\n  ${provider.cmd} recipes\n  ${provider.cmd} curl "hello"\n  ${provider.cmd} skills install\n  ${provider.cmd} contract --json\n  ${provider.cmd} learn\n${special}\nAutomation flags:\n  --stdin --read <file|-> --file <path> --json --raw --stream --dry-run --model <name> --system <text>\n  --temperature <n> --top-p <n> --max-tokens <n> --response-format json\n  --schema-file <json> --messages-file <json> --tools-file <json> --timeout <ms> --retries <n>\n\nAgent rule of thumb:\n  Use --json for automation, --dry-run for safe request inspection, and stderr for diagnostics only.\n`;
 }
 
 function findRepoRoot(start) { let cur=start||process.cwd(); for(let i=0;i<8;i++){ if(fs.existsSync(path.join(cur,'package.json'))&&fs.existsSync(path.join(cur,'skills'))) return cur; const next=path.dirname(cur); if(next===cur) break; cur=next;} return start||process.cwd(); }
@@ -378,7 +395,7 @@ export async function runProviderCli(providerId, argv=process.argv.slice(2), opt
   if(cmd==='config'){ const sub=args._[1]||'list'; const cfg=readConfig(); cfg[provider.id] ||= {}; if(sub==='path') return printText(configPath()); if(sub==='set'&&args._[2]==='api-key'){ cfg[provider.id].apiKey=args._[3]||''; writeConfig(cfg); return printText(`Saved ${provider.display} credential to ${configPath()}`);} if(sub==='unset'&&args._[2]==='api-key'){ delete cfg[provider.id].apiKey; writeConfig(cfg); return printText(`Removed ${provider.display} credential`);} const out={provider:provider.id,configPath:configPath(),apiKey:cfg[provider.id].apiKey?redact(cfg[provider.id].apiKey):null}; return args.json?printJson(out):printText(`${provider.display} config\napiKey: ${out.apiKey || '(not set)'}\npath: ${out.configPath}`); }
   if(cmd==='doctor'){ const key=getProviderKey(provider,args); const needsKey=provider.auth!=='none' && provider.id!=='bedrock'; const ok=provider.id==='ollama' || provider.id==='bedrock' || Boolean(key); const out={provider:provider.id,ok,checks:[{name:'credential',ok:ok,value:key?redact(key):(provider.id==='ollama'?'not required':null),fix:ok?null:`Set ${provider.env} or run ${provider.cmd} config set api-key <key>`},{name:'baseUrl',ok:true,value:args['base-url']||provider.base_url},{name:'defaultModel',ok:true,value:args.model||provider.default_model},{name:'protocol',ok:true,value:provider.protocol},{name:'stdoutContract',ok:true,value:'model output or JSON only'},{name:'stderrContract',ok:true,value:'diagnostics only'}]}; return args.json?printJson(out):printText(out.checks.map(c=>`${c.ok?'✓':'!'} ${c.name}: ${c.value||c.fix}`).join('\n')); }
   if(cmd==='templates') return printText(`Templates\n  summarize\n  review-diff\n  extract-json\n  explain-error\n\nExample:\n  ${provider.cmd} prompt -f examples/recipes/review-diff.md --stdin < diff.patch --json`);
-  if(cmd==='examples') return printText(`Examples\n  ${provider.cmd} chat "hello"\n  cat error.log | ${provider.cmd} chat --stdin "Explain this error" --json\n  ${provider.cmd} chat "Return JSON" --response-format json --json\n  ${provider.cmd} chat "hello" --dry-run --json`);
+  if(cmd==='examples') return printText(`Examples\n  ${provider.cmd} chat "hello"\n  ${provider.cmd} chat --read prompt.md --dry-run --json\n  cat error.log | ${provider.cmd} chat --stdin "Explain this error" --json\n  cat prompt.md | ${provider.cmd} chat --read - "Summarize this" --dry-run --json\n  ${provider.cmd} chat "Return JSON" --response-format json --json\n  ${provider.cmd} chat "hello" --dry-run --json`);
   if(cmd==='audit'){ const out={provider:provider.id,ok:true,checks:[{name:'jsonForAgents',ok:true},{name:'redactsSecrets',ok:true},{name:'dryRunIsSafe',ok:true},{name:'noToolExecution',ok:true}],recommendation:`Use ${provider.cmd} chat ... --json and --dry-run for request debugging.`}; return args.json?printJson(out):printText(out.checks.map(c=>`✓ ${c.name}`).join('\n')); }
   if(cmd==='selftest'){ const out={provider:provider.id,ok:true,checks:['help','models','doctor','dryRunShape','skills']}; return args.json?printJson(out):printText(`${provider.display} selftest passed`); }
   if(cmd==='contract'){ const out=outputContract(provider); return args.json?printJson(out):printText(renderContract(out)); }
@@ -391,8 +408,12 @@ export async function runProviderCli(providerId, argv=process.argv.slice(2), opt
   if(provider.id==='bedrock' && cmd==='converse') cmd='chat';
   if(provider.id==='anthropic' && cmd==='count-tokens') { const text=args._.slice(1).join(' '); const stdinText=await readStdinIfNeeded(args); const req=buildRequest({...provider, endpoint:'/messages/count_tokens'}, args, text, stdinText); const key=getProviderKey(provider,args); if(args['dry-run']||!key) { const out=stableDryRun(provider,req,key,args); return args.json?printJson(out):printText(out.redactedCurl); } try{ const raw=await callProvider(provider,req,key,args); return args.raw?printText(raw):printJson({provider:provider.id,ok:true,response:JSON.parse(raw)}); } catch(e){return fail(`Request failed: ${e.message||e}`);} }
   if(cmd==='prompt'||cmd==='chat'||cmd==='curl'){
-    let text=args._.slice(1).join(' '); if(cmd==='prompt'){ const file=args.f||args.file; if(file) text=fs.readFileSync(file,'utf8'); }
-    const stdinText=await readStdinIfNeeded(args); const req=buildRequest(provider,args,text,stdinText); const key=getProviderKey(provider,args);
+    const text=args._.slice(1).join(' ');
+    let req;
+    try {
+      const stdinText=await readStdinIfNeeded(args); req=buildRequest(provider,args,text,stdinText);
+    } catch(e) { return fail(e.message||e); }
+    const key=getProviderKey(provider,args);
     if(cmd==='curl') return printText(toCurl(provider,req,key,args));
     if(args['dry-run']){ const out=stableDryRun(provider,req,key,args); if(args.save) fs.writeFileSync(args.save,JSON.stringify(out,null,2)); return args.json?printJson(out):printText(out.redactedCurl); }
     if(provider.auth !== 'none' && provider.id !== 'bedrock' && !key) return fail(`Missing API key. Set ${provider.env} or run ${provider.cmd} config set api-key <key>.`);

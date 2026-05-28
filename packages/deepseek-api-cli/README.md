@@ -12,6 +12,8 @@ Use:
 deepseek setup
 deepseek doctor --json
 deepseek chat "hello" --dry-run --json
+deepseek chat --read prompt.md --dry-run --json
+cat notes.md | deepseek chat --read - "Summarize this" --dry-run --json
 deepseek chat "hello" --json
 ```
 

@@ -12,6 +12,8 @@ npm install -g @just-agent/deepseek-cli
 
 ```bash
 deepseek chat "hello" --dry-run --json
+deepseek chat --read prompt.md --dry-run --json
+cat notes.md | deepseek chat --read - "Summarize this" --dry-run --json
 deepseek doctor --json
 provider-api recommend "cheap reasoning json extraction" --json
 provider-api skills install --all --dir ./tmp-skills --json

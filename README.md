@@ -43,6 +43,15 @@ DeepSeek is often the first practical choice for cost-sensitive reasoning, OpenA
 
 The project still keeps the original multi-provider toolkit because real agent work often needs provider comparison, migration, fallback, or local/offline testing. The repo positioning is now **DeepSeek first, provider-aware second**.
 
+## Prior art considered
+
+This project keeps its own non-interactive, script-friendly architecture, but it borrows useful ergonomics from public DeepSeek CLI work:
+
+| Source | Useful idea adopted | Boundary kept here |
+| --- | --- | --- |
+| [`PierrunoYT/deepseek-cli`](https://github.com/PierrunoYT/deepseek-cli) | File and pipe input are first-class prompt sources. | No large interactive session layer is added to the core runtime. |
+| [`holasoymalva/deepseek-cli`](https://github.com/holasoymalva/deepseek-cli) | Local/private Ollama workflows deserve a clear path. | Local execution stays under `ollama-api` instead of overloading the DeepSeek cloud command. |
+
 ## Quick start
 
 Install from npm after publication:
@@ -65,9 +74,21 @@ Try the DeepSeek path without making a live API request:
 
 ```bash
 node packages/deepseek-api-cli/bin/deepseek.mjs chat "hello" --dry-run --json
+node packages/deepseek-api-cli/bin/deepseek.mjs chat --read prompt.md --dry-run --json
+cat notes.md | node packages/deepseek-api-cli/bin/deepseek.mjs chat --read - "Summarize this" --dry-run --json
 node packages/provider-api-cli/bin/provider-api.mjs recommend "cheap reasoning json extraction" --json
 node packages/provider-api-cli/bin/provider-api.mjs skills install --all --dir ./tmp-skills --json
 ```
+
+Prompt input options:
+
+| Input source | Command |
+| --- | --- |
+| Inline text | `deepseek chat "hello" --dry-run --json` |
+| Prompt file | `deepseek chat --read prompt.md --dry-run --json` |
+| Legacy prompt file alias | `deepseek prompt -f prompt.md --dry-run --json` |
+| Pipe / stdin | `cat diff.patch \| deepseek chat --read - "Review this diff" --dry-run --json` |
+| Local/private model path | `ollama-api chat "hello" --dry-run --json` |
 
 ## DeepSeek-first workflow
 
